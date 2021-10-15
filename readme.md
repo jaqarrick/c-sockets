@@ -77,4 +77,4 @@ To try the demo, prepare the programs by running the `make` command. You can the
 If an address isn't specified, the `client` program will default to localhost.
 
 # Attribution
-Notes from [CSE4202](&list=PLZIwlOSv75K7jXcVABdIo3wyKp5NwXKlW&index=2https://www.youtube.com/watch?v=ws2uptjZwmA), [Socket Programming in C / C++](https://www.geeksforgeeks.org/socket-programming-cc/). Demo follows along [this tutorial](https://www.youtube.com/watch?v=nA0LU9sqJls) and [this blog post](https://www.binarytides.com/socket-programming-c-linux-tutorial/), but with some adjustments.
+Notes from [CSE4202](https://www.youtube.com/watch?v=ws2uptjZwmA&list=PLZIwlOSv75K7jXcVABdIo3wyKp5NwXKlW), [Socket Programming in C / C++](https://www.geeksforgeeks.org/socket-programming-cc/). Demo follows along [this tutorial](https://www.youtube.com/watch?v=nA0LU9sqJls) and [this blog post](https://www.binarytides.com/socket-programming-c-linux-tutorial/), but with some adjustments.
