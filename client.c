@@ -7,8 +7,9 @@
 
 #include <arpa/inet.h>
 #include <netinet/in.h>
+#define PORT 8080
 
-int main() {
+int main(int argc, char* argv[]) {
 
     int sock;
    
@@ -17,19 +18,27 @@ int main() {
     // 0 for TCP
     sock = socket(AF_INET, SOCK_STREAM, 0);
 
+    if(sock == -1){
+        printf("Count not create client socket");
+    }
     // struct for the socket address
     struct sockaddr_in server_address;
     // set server address family to IPv4
     server_address.sin_family = AF_INET;
 
     //specify the port - htons is a utility making sure it is in correct network bite order
-    server_address.sin_port = htons(8001);
-    // shortcut for localhost IP address
-    server_address.sin_addr.s_addr = INADDR_ANY;
+    server_address.sin_port = htons(PORT);
 
+    if(argc < 2){
+        printf("No IP address declared, defaulting to localhost.\n");
+        // shortcut for local IP addr
+        server_address.sin_addr.s_addr=htonl(INADDR_LOOPBACK);
+    } else {
+        printf("Attempting to connect to %s\n", argv[1]);
+        server_address.sin_addr.s_addr = inet_addr(argv[1]);
+    }
     // 2. initiate the connection
-    int connection = connect(sock, (struct sockaddr *) &server_address, sizeof(server_address));
-
+    int connection = connect(sock, (struct sockaddr *)&server_address, sizeof(server_address));
 
     // error handling
     if(connection == -1){

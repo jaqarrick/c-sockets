@@ -12,7 +12,7 @@ __What is a socket?__
 
 ```
 #include <sys/socket.h>
-int sockfd = socket(int domain, int type, int protocol)
+int sockfd = socket(int domain, int type, int protocol);
 ```
 
 Let's look at these three arguments, `domain`, `type`, and `protocol`:
@@ -30,7 +30,7 @@ __protocol__: Protocol value for Internet Protocol(IP), which is 0. This is the 
 Binding is like registering a phone number to the phone - we need to bind the socket to a specific port number.
 ```
 #include <sys/socket.h>
-int bind(int sockfd, struct sockaddr *sockaddr, socklen_t addrlen)
+int bind(int sockfd, struct sockaddr *sockaddr, socklen_t addrlen);
 ```
 
 This function takes the actual socket and binds it to a port address `sockaddr`.
@@ -69,5 +69,12 @@ int connect(int sockfd, struct sockaddr *serv_addr, socklen_t addrlen);
 
 In this case the `sockaddr` will be the IP address and port number of the server. 
 
+# Demo
+To try the demo, prepare the programs by running the `make` command. You can then run the socket server with `./server` and the client in another terminal window with `./client`. You can also run the client and server on two separate machines. On the server machine (this could be a VM, or remotely hosted machine) simply run `./server`. On the client, run `./client` but add the IP address of the server as an argument like so:
+```
+./client ip_addr
+```
+If an address isn't specified, the `client` program will default to localhost.
+
 # Attribution
-Notes from [CSE4202](&list=PLZIwlOSv75K7jXcVABdIo3wyKp5NwXKlW&index=2https://www.youtube.com/watch?v=ws2uptjZwmA), [Socket Programming in C / C++](https://www.geeksforgeeks.org/socket-programming-cc/). Code example is sourced from [this tutorial](https://www.youtube.com/watch?v=nA0LU9sqJls) and [this blog post](https://www.binarytides.com/socket-programming-c-linux-tutorial/).
+Notes from [CSE4202](&list=PLZIwlOSv75K7jXcVABdIo3wyKp5NwXKlW&index=2https://www.youtube.com/watch?v=ws2uptjZwmA), [Socket Programming in C / C++](https://www.geeksforgeeks.org/socket-programming-cc/). Demo follows along [this tutorial](https://www.youtube.com/watch?v=nA0LU9sqJls) and [this blog post](https://www.binarytides.com/socket-programming-c-linux-tutorial/), but with some adjustments.
