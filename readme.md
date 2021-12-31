@@ -17,11 +17,14 @@ int sockfd = socket(int domain, int type, int protocol);
 
 Let's look at these three arguments, `domain`, `type`, and `protocol`:
 
-__domain__: integer, communication domain e.g., AF_INET (IPv4 protocol) , AF_INET6 (IPv6 protocol)
+__domain__ (also referred to as _family_): integer, communication domain e.g., AF_INET (IPv4 protocol) , AF_INET6 (IPv6 protocol)
+- Most likely used is PF_INET for IPv4 protocols, Internet Addresses, 
+- PF_UNIX is used for local communication, file addresses, etc. 
 __type__: communication type
 SOCK_STREAM: TCP(reliable, connection oriented)
 SOCK_DGRAM: UDP(unreliable, connectionless)
 __protocol__: Protocol value for Internet Protocol(IP), which is 0. This is the same number which appears on protocol field in the IP header of a packet.(man protocols for more details)
+- IPPROTO_TCP IPPROTO_UDP, usually set to 0 though. 
 
 
 ...
@@ -68,6 +71,16 @@ int connect(int sockfd, struct sockaddr *serv_addr, socklen_t addrlen);
 ```
 
 In this case the `sockaddr` will be the IP address and port number of the server. 
+
+### 6. Close
+When the socket is no longer being used, it should be closed. Use the `close` function like so:
+
+```
+int status = close(sockid);
+
+```
+
+This will produce a `-1` status in case of error.
 
 # Demo
 To try the demo, prepare the programs by running the `make` command. You can then run the socket server with `./server` and the client in another terminal window with `./client`. You can also run the client and server on two separate machines. On the server machine (this could be a VM, or remotely hosted machine) simply run `./server`. On the client, run `./client` but add the IP address of the server as an argument like so:

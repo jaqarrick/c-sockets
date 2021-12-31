@@ -13,7 +13,7 @@ int main(){
     char server_message[256] = "Hello from the server!";
 
     int server_sock;
-    // 1. Initiate the server socket
+    // 1. Initiate the server socket, i.e. create a new connection endpoint
     server_sock = socket(AF_INET, SOCK_STREAM, 0);
 
     if(server_sock == -1){
@@ -28,7 +28,7 @@ int main(){
     // set local IP address (shortcut)
     server_address.sin_addr.s_addr=htonl(INADDR_LOOPBACK);
 
-    // 2. Bind the socket to the address
+    // 2. Bind the socket to the address, i.e. attach a local address to a socket
     bind(server_sock, (struct sockaddr*) &server_address, sizeof(server_address));
 
     printf("Binding socket to port\n\n");
@@ -41,10 +41,19 @@ int main(){
     // Since address is local, we don't need last two args. 
     client_socket = accept(server_sock, NULL, NULL);
 
+    printf("Sending a message to the client!\n");
     // once connected, send the message
     send(client_socket, server_message, sizeof(server_message), 0);
 
-    return 0;
+    int status = close(server_sock);
 
+    if(status == -1){
+        printf("Error closing the socket connection.\n");
+        return 0;
+    }
+
+    printf("Closing the socket connection!\n");
+
+    return 0;
 
 }
