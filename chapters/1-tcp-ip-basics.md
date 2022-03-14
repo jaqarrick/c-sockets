@@ -53,10 +53,35 @@ _source: wikipedia_
 
 The most important header in the transport layer is _port number_. A port number defines a specific process or network service to a 16-bit unsigned integer. From an IP address we can determine which device sent / received the packet, but a port number determines the _application_. 
 
-## TCP
-🚧 TODO 🚧
+## Transmission Control Protocol (TCP)
+Designed to make sure all data is received and is _in order_. Breaks message up into segments and attaches headers to each one. For example the sequence header (_seq_), which lets the receiver know the order in which the packets are to be received. 
+- Uses a state machine that tracks whether or not a machine is connected to another. The states depend whether or not the machine is a server or a client. 
 
-## Attribution 
+Client States:
+1. Begin as `CLOSED`
+2. To initiate a connection, client sends a `SYN` signal (a bite that goes in front of the first bite of data you want to send). Client moves to `SYN-SENT` state
+3. When client receives the `SYN-ACK` signal it sends its `ACK` signal and moves to `ESTABLISHED` state. 
+
+Sever States:
+1. Begin as `CLOSED`
+2. Servers are passive. When a connection opens it moves to `LISTEN` state. 
+3. Once a `SYN` packet is received it moves to `SYN-RCVD` state and sends `SYN-ACK` to client. 
+4. Once the server receives the `ACK` signal, it moves to `ESTABLISHED`
+
+Closing a connection:
+Either the server or the client can close the connection. To initialize a closed connection either party sends a `FIN` signal, then moves to `FIN-WAIT-1` state. 
+
+Once `ACK` is received by closer moves to `FIN-WAIT-2`, then sends its own `ACK` signal. Then moves to `TIME-WAIT` status. Once the timeout is finished closer moves to `CLOSED` status. 
+
+When a machine _receives_ a `FIN` signal (instead of sending one itself) it will send an `ACK` signal and move to `CLOSE-WAIT` status until the party sends `FIN`. Then moves to `LAST-ACK` until a final `ACK` is received from the other end. 
+
+## TCP Headers
+![TCP HEADER](../assets/TCP_HEADER.png)
+_source: wikipedia_
+
+_Now that we've become familiar with the basics of TCP/UDP network protocols, we can dive in and start coding. Navigate to the [next section](2-socket-basics.md) to have a look at the sockets API!
+
+## Attribution
 Wikipedia, [Rhymu's Introduction to TCP/IP and Sockets](https://www.youtube.com/watch?v=C7CpfL1p6y0)
 
 
