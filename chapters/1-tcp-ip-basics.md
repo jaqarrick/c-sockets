@@ -79,7 +79,7 @@ When a machine _receives_ a `FIN` signal (instead of sending one itself) it will
 ![TCP HEADER](../assets/TCP_HEADER.png)
 _source: wikipedia_
 
-_Now that we've become familiar with the basics of TCP/UDP network protocols, we can dive in and start coding. Navigate to the [next section](2-socket-basics.md) to have a look at the sockets API!
+_Now that we've become familiar with the basics of TCP/UDP network protocols, we can dive in and start coding. Navigate to the [next section](2-socket-basics.md) to have a look at the sockets API!_
 
 ## Attribution
 Wikipedia, [Rhymu's Introduction to TCP/IP and Sockets](https://www.youtube.com/watch?v=C7CpfL1p6y0)
