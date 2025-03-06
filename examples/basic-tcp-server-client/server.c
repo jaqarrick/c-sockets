@@ -15,7 +15,8 @@ int main(){
     int server_sock;
     // 1. Initiate the server socket, i.e. create a new connection endpoint
     server_sock = socket(AF_INET, SOCK_STREAM, 0);
-
+    printf("server socket file descriptor: %d\n", server_sock);
+    char hello[256] = "Hello to stdout!";
     if(server_sock == -1){
         printf("Could not create server socket\n");
     }

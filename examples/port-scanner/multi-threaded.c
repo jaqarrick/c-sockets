@@ -114,7 +114,6 @@ void free_task_queue(TaskQueue *queue)
 
 void execute_task(Task *task)
 {
-    // replace this with some long running operation
     int connection = scan_port(task->port);
     if (connection == 1)
     {
