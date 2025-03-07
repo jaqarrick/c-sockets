@@ -14,9 +14,6 @@ typedef struct {
     char host[256];
     int port;
     char path[1024];
-    char version[16];
-    char headers[MAX_HEADERS][2][256];
-    int header_count;
 } HttpRequest;
 
 int parse_http_request(const char *request, HttpRequest *http_request);
