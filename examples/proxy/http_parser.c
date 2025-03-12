@@ -19,24 +19,24 @@ int parse_http_request(const char *raw_request, HttpRequest *http_request)
         return -1;
     }
     
-    char *saveptr1 = NULL;
-    char *saveptr2 = NULL;
+    char *line_ptr = NULL;
+    char *token_ptr = NULL;
     
     // parse first line
-    char *line = strtok_r(request_copy, "\r\n", &saveptr1);
+    char *line = strtok_r(request_copy, "\r\n", &line_ptr);
     if (line) {
-        char *token = strtok_r(line, " ", &saveptr2);
+        char *token = strtok_r(line, " ", &token_ptr);
         if (token) {
             // method
             strncpy(method, token, sizeof(method) - 1);
-            token = strtok_r(NULL, " ", &saveptr2);
+            token = strtok_r(NULL, " ", &token_ptr);
             if (token) {
                 strncpy(path, token, sizeof(path) - 1);
             }
         }
         
         // Parse headers
-        while ((line = strtok_r(NULL, "\r\n", &saveptr1)) != NULL) {
+        while ((line = strtok_r(NULL, "\r\n", &line_ptr)) != NULL) {
             // look for Host header
             if (strncasecmp(line, "Host:", 5) == 0) {
                 char *host_value = line + 5;
