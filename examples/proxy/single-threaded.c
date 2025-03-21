@@ -6,29 +6,21 @@
 #include <netinet/in.h>
 #include <netdb.h>
 #include <arpa/inet.h>
-#include <pthread.h>
 #include "http_parser.h"
 
 #define PORT 5100
 
-typedef struct {
-	int client_socket;
-} thread_args_t;
-
-void *handle_client(void *arg)
+void handle_client(int client_socket)
 {
 	char buffer[1024];
 	ssize_t read_size;
-	thread_args_t *args = (thread_args_t *)arg;
-	int client_socket = args->client_socket;
-	free(args);
 	read_size = recv(client_socket, buffer, sizeof(buffer) - 1, 0);
 
 	if (read_size <= 0)
 	{
 		perror("Error receiving client message\n");
 		close(client_socket);
-		return NULL;
+		return;
 	}
 
 	buffer[read_size] = '\0';
@@ -38,7 +30,7 @@ void *handle_client(void *arg)
 	{
 		printf("parse unsuccessfull\n");
 		close(client_socket);
-		return NULL;
+		return;
 	}
 
 	if (strcmp(request.method, "CONNECT") == 0)
@@ -48,7 +40,7 @@ void *handle_client(void *arg)
 		char *response = "HTTP/1.1 501 Not Implemented\r\n\r\n";
 		write(client_socket, response, strlen(response));
 		close(client_socket);
-		return NULL;
+		return;
 	}
 
 	int proxy_socket = socket(AF_INET, SOCK_STREAM, 0);
@@ -56,7 +48,7 @@ void *handle_client(void *arg)
 	{
 		perror("Error creating proxy socket\n");
 		close(proxy_socket);
-		return NULL;
+		return;
 	}
 	struct sockaddr_in proxy_address;
 	memset(&proxy_address, 0, sizeof(proxy_address));
@@ -76,7 +68,7 @@ void *handle_client(void *arg)
 	if (err != 0)
 	{
 		fprintf(stderr, "Error: %s\n", gai_strerror(err));
-		return NULL;
+		return;
 	}
 	// Print the first IP address associated with the host
 	char ip_str[INET6_ADDRSTRLEN];
@@ -103,7 +95,7 @@ void *handle_client(void *arg)
 	{
 		close(proxy_socket);
 		close(client_socket);
-		return NULL;
+		return;
 	}
 
 	// Free the address information
@@ -114,7 +106,7 @@ void *handle_client(void *arg)
 		perror("Proxy connection failed\n");
 		close(client_socket);
 		close(proxy_socket);
-		return NULL;
+		return;
 	}
 
 	send(proxy_socket, buffer, read_size, 0);
@@ -123,7 +115,7 @@ void *handle_client(void *arg)
 
 	close(proxy_socket);
 	close(client_socket);
-	return NULL;
+	return;
 }
 
 int main()
@@ -154,7 +146,7 @@ int main()
 		printf("Server socket binded\n");
 	}
 
-	if (listen(server_sock, 10) < 0)
+	if (listen(server_sock, 1) < 0)
 	{
 		perror("Failed to listen on server socket\n");
 		close(server_sock);
@@ -164,7 +156,6 @@ int main()
 	{
 		printf("Server listening at port %d\n", PORT);
 	}
-	pthread_t t_id;
 	while (1)
 	{
 		socklen_t client_len = sizeof(client_address);
@@ -175,17 +166,9 @@ int main()
 			close(client_sock);
 			exit(EXIT_FAILURE);
 		}
-		thread_args_t *args = malloc(sizeof(thread_args_t));
-		args->client_socket = client_sock;
-		printf("Client connected: %s\n", inet_ntoa(client_address.sin_addr));
-		if(pthread_create(&t_id, NULL, handle_client, args) != 0){
-			perror("Thread creation failed");
-			free(args);
-			close(client_sock);
-			continue;
-		}
 
-		pthread_detach(t_id);
+		printf("Client connected: %s\n", inet_ntoa(client_address.sin_addr));
+		handle_client(client_sock);
 	}
 	close(server_sock);
 	exit(0);
