@@ -19,6 +19,9 @@ cd c-sockets/examples/some-example-directory
 make
 ```
 1. [Basic TCP Client / Server](examples/basic-tcp-server-client/)
+2. [Port scanner](examples/port-scanner/)
+3. [Reverse shell](examples/remote-access/)
+4. [Proxy](examples/proxy/)
 
 ### Attribution
 Each chapter in this guide references its relevant sources.
